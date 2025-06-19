@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifestyle Survey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        nav {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .form-group, .results {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        input[type="tel"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        .checkbox-group, .radio-group {
+            margin: 20px 0;
+        }
+        .checkbox-group label, .radio-group label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        button {
+            padding: 12px 24px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .error {
+            color: #d32f2f;
+            display: none;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        .success {
+            color: #2e7d32;
+            display: none;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        .loader {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007BFF;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 10px 0;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lifestyle Survey</h1>
+    <nav>
+        <a href="#" onclick="showScreen('surveyScreen')">Fill Out Survey</a>
+        <a href="#" onclick="showScreen('resultsScreen')">View Survey Results</a>
+    </nav>
+
+    <!-- Screen 1: Fill Out Survey -->
+    <div id="surveyScreen">
+        <form id="surveyForm" onsubmit="submitSurvey(event)" aria-label="Lifestyle Survey Form">
+            <h2>Personal Details</h2>
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required aria-required="true" placeholder="Enter your full name">
+                <p id="nameError" class="error">Please enter a valid name (at least 2 characters).</p>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required aria-required="true" placeholder="Enter your email address">
+                <p id="emailError" class="error">Please enter a valid email address.</p>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required aria-required="true">
+                <p id="dobError" class="error">Please enter a valid date of birth (age 5-120).</p>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact Number:</label>
+                <input type="tel" id="contact" name="contact" required aria-required="true" placeholder="Enter your contact number">
+                <p id="contactError" class="error">Please enter a valid contact number.</p>
+            </div>
+            <div class="form-group">
+                <label>What is your favorite food?</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="food" value="pizza"> Pizza</label>
+                    <label><input type="checkbox" name="food" value="pasta"> Pasta</label>
+                    <label><input type="checkbox" name="food" value="papandwors"> Pap and Wors</label>
+                    <label><input type="checkbox" name="food" value="other"> Other</label>
+                </div>
+                <p id="foodError" class="error">Please select at least one favorite food.</p>
+            </div>
+            <div class="form-group">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Strongly Agree</th>
+                            <th>Agree</th>
+                            <th>Neutral</th>
+                            <th>Disagree</th>
+                            <th>Strongly Disagree</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>I like to watch movies</td>
+                            <td><input type="radio" name="movies" value="5" required></td>
+                            <td><input type="radio" name="movies" value="4"></td>
+                            <td><input type="radio" name="movies" value="3"></td>
+                            <td><input type="radio" name="movies" value="2"></td>
+                            <td><input type="radio" name="movies" value="1"></td>
+                        </tr>
+                        <tr>
+                            <td>I like to listen to radio</td>
+                            <td><input type="radio" name="radio" value="5" required></td>
+                            <td><input type="radio" name="radio" value="4"></td>
+                            <td><input type="radio" name="radio" value="3"></td>
+                            <td><input type="radio" name="radio" value="2"></td>
+                            <td><input type="radio" name="radio" value="1"></td>
+                        </tr>
+                        <tr>
+                            <td>I like to eat out</td>
+                            <td><input type="radio" name="eatout" value="5" required></td>
+                            <td><input type="radio" name="eatout" value="4"></td>
+                            <td><input type="radio" name="eatout" value="3"></td>
+                            <td><input type="radio" name="eatout" value="2"></td>
+                            <td><input type="radio" name="eatout" value="1"></td>
+                        </tr>
+                        <tr>
+                            <td>I like to watch TV</td>
+                            <td><input type="radio" name="tv" value="5" required></td>
+                            <td><input type="radio" name="tv" value="4"></td>
+                            <td><input type="radio" name="tv" value="3"></td>
+                            <td><input type="radio" name="tv" value="2"></td>
+                            <td><input type="radio" name="tv" value="1"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p id="ratingError" class="error">Please select a rating for all questions.</p>
+            </div>
+            <button type="submit" id="submitButton">Submit</button>
+            <div id="loader" class="loader"></div>
+            <p id="successMessage" class="success">Survey submitted successfully!</p>
+        </form>
+    </div>
+
+    <!-- Screen 2: View Survey Results -->
+    <div id="resultsScreen" class="hidden">
+        <h2>Survey Results</h2>
+        <div id="noSurveys" class="results">No Surveys Available</div>
+        <div id="surveyResults" class="results hidden">
+            <p>Total number of surveys: <span id="totalSurveys"></span></p>
+            <p>Average Age: <span id="averageAge"></span></p>
+            <p>Oldest person who participated in survey: <span id="oldestAge"></span></p>
+            <p>Youngest person who participated in survey: <span id="youngestAge"></span></p>
+            <p>Percentage of people who like Pizza: <span id="pizzaPercentage"></span>%</p>
+            <p>Percentage of people who like Pasta: <span id="pastaPercentage"></span>%</p>
+            <p>Percentage of people who like Pap and Wors: <span id="papandworsPercentage"></span>%</p>
+            <p>People who like to watch movies: <span id="moviesAverage"></span></p>
+            <p>People who like to listen to radio: <span id="radioAverage"></span></p>
+            <p>People who like to eat out: <span id="eatoutAverage"></span></p>
+            <p>People who like to watch TV: <span id="tvAverage"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function showScreen(screenId) {
+            document.getElementById('surveyScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
+            if (screenId === 'resultsScreen') {
+                displayResults();
+            }
+        }
+
+        // Calculate age from date of birth
+        function calculateAge(dob) {
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        // Validate and submit survey
+        async function submitSurvey(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const nameInput = form.elements['name'];
+            const emailInput = form.elements['email'];
+            const dobInput = form.elements['dob'];
+            const contactInput = form.elements['contact'];
+            const foodInputs = form.elements['food'];
+            const moviesInput = form.elements['movies'];
+            const radioInput = form.elements['radio'];
+            const eatoutInput = form.elements['eatout'];
+            const tvInput = form.elements['tv'];
+            const errorElements = {
+                name: document.getElementById('nameError'),
+                email: document.getElementById('emailError'),
+                dob: document.getElementById('dobError'),
+                contact: document.getElementById('contactError'),
+                food: document.getElementById('foodError'),
+                rating: document.getElementById('ratingError')
+            };
+            const successElement = document.getElementById('successMessage');
+            const submitButton = document.getElementById('submitButton');
+            const loader = document.getElementById('loader');
+
+            // Reset feedback
+            Object.values(errorElements).forEach(el => el.style.display = 'none');
+            successElement.style.display = 'none';
+            submitButton.disabled = true;
+            loader.style.display = 'block';
+
+            // Validate inputs
+            let isValid = true;
+            const surveyData = { foods: [] };
+
+            // Name
+            if (!nameInput || !nameInput.value.trim() || nameInput.value.trim().length < 2) {
+                errorElements.name.style.display = 'block';
+                isValid = false;
+            } else {
+                surveyData.name = nameInput.value.trim();
+            }
+
+            // Email
+            if (!emailInput || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+                errorElements.email.style.display = 'block';
+                isValid = false;
+            } else {
+                surveyData.email = emailInput.value.trim();
+            }
+
+            // Date of Birth
+            if (!dobInput || !dobInput.value) {
+                errorElements.dob.style.display = 'block';
+                isValid = false;
+            } else {
+                const age = calculateAge(dobInput.value);
+                if (age < 5 || age > 120) {
+                    errorElements.dob.textContent = 'Age must be between 5 and 120.';
+                    errorElements.dob.style.display = 'block';
+                    isValid = false;
+                } else {
+                    surveyData.dob = dobInput.value;
+                    surveyData.age = age;
+                }
+            }
+
+            // Contact
+            if (!contactInput || !/^\+?\d{7,15}$/.test(contactInput.value.trim())) {
+                errorElements.contact.style.display = 'block';
+                isValid = false;
+            } else {
+                surveyData.contact = contactInput.value.trim();
+            }
+
+            // Favorite Food
+            const selectedFoods = Array.from(foodInputs).filter(input => input.checked).map(input => input.value);
+            if (selectedFoods.length === 0) {
+                errorElements.food.style.display = 'block';
+                isValid = false;
+            } else {
+                surveyData.foods = selectedFoods;
+            }
+
+            // Ratings
+            if (!moviesInput.value || !radioInput.value || !eatoutInput.value || !tvInput.value) {
+                errorElements.rating.style.display = 'block';
+                isValid = false;
+            } else {
+                surveyData.movies = parseInt(moviesInput.value);
+                surveyData.radio = parseInt(radioInput.value);
+                surveyData.eatout = parseInt(eatoutInput.value);
+                surveyData.tv = parseInt(tvInput.value);
+            }
+
+            if (!isValid) {
+                submitButton.disabled = false;
+                loader.style.display = 'none';
+                return;
+            }
+
+            try {
+                // Save to localStorage
+                const surveys = JSON.parse(localStorage.getItem('surveys') || '[]');
+                surveys.push(surveyData);
+                localStorage.setItem('surveys', JSON.stringify(surveys));
+
+                successElement.style.display = 'block';
+                form.reset();
+            } catch (error) {
+                console.error('Error saving survey:', error);
+                errorElements.rating.textContent = 'Failed to submit survey. Please try again.';
+                errorElements.rating.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                loader.style.display = 'none';
+            }
+        }
+
+        // Display survey results
+        function displayResults() {
+            const surveys = JSON.parse(localStorage.getItem('surveys') || '[]');
+            const noSurveys = document.getElementById('noSurveys');
+            const surveyResults = document.getElementById('surveyResults');
+
+            if (surveys.length === 0) {
+                noSurveys.classList.remove('hidden');
+                surveyResults.classList.add('hidden');
+                return;
+            }
+
+            noSurveys.classList.add('hidden');
+            surveyResults.classList.remove('hidden');
+
+            // Calculations
+            const totalSurveys = surveys.length;
+            const ages = surveys.map(s => s.age);
+            const averageAge = ages.reduce((sum, age) => sum + age, 0) / totalSurveys;
+            const oldestAge = Math.max(...ages);
+            const youngestAge = Math.min(...ages);
+            const pizzaCount = surveys.filter(s => s.foods.includes('pizza')).length;
+            const pastaCount = surveys.filter(s => s.foods.includes('pasta')).length;
+            const papandworsCount = surveys.filter(s => s.foods.includes('papandwors')).length;
+            const moviesAvg = surveys.reduce((sum, s) => sum + s.movies, 0) / totalSurveys;
+            const radioAvg = surveys.reduce((sum, s) => sum + s.radio, 0) / totalSurveys;
+            const eatoutAvg = surveys.reduce((sum, s) => sum + s.eatout, 0) / totalSurveys;
+            const tvAvg = surveys.reduce((sum, s) => sum + s.tv, 0) / totalSurveys;
+
+            // Update DOM
+            document.getElementById('totalSurveys').textContent = totalSurveys;
+            document.getElementById('averageAge').textContent = averageAge.toFixed(1);
+            document.getElementById('oldestAge').textContent = oldestAge;
+            document.getElementById('youngestAge').textContent = youngestAge;
+            document.getElementById('pizzaPercentage').textContent = ((pizzaCount / totalSurveys) * 100).toFixed(1);
+            document.getElementById('pastaPercentage').textContent = ((pastaCount / totalSurveys) * 100).toFixed(1);
+            document.getElementById('papandworsPercentage').textContent = ((papandworsCount / totalSurveys) * 100).toFixed(1);
+            document.getElementById('moviesAverage').textContent = moviesAvg.toFixed(1);
+            document.getElementById('radioAverage').textContent = radioAvg.toFixed(1);
+            document.getElementById('eatoutAverage').textContent = eatoutAvg.toFixed(1);
+            document.getElementById('tvAverage').textContent = tvAvg.toFixed(1);
+        }
+
+        // Initialize
+        showScreen('surveyScreen');
+    </script>
+</body>
+</html>
